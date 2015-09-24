@@ -1,5 +1,6 @@
 # JSON API Headers
 
+[![Build Status](https://travis-ci.org/elliotttf/jsonapi-headers.svg?branch=master)](https://travis-ci.org/elliotttf/jsonapi-headers)
 [![Coverage Status](https://coveralls.io/repos/elliotttf/jsonapi-headers/badge.svg?branch=master&service=github)](https://coveralls.io/github/elliotttf/jsonapi-headers?branch=master)
 
 This module validates incoming headers and adds outgoing headers for
