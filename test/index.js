@@ -129,12 +129,26 @@ module.exports = {
 
       testHeaders(
         this.tHeaders,
-        'application/vnd.api+json; ext=bulk',
+        'application/vnd.api+json; ext="bulk,jsonpatch"',
         'application/vnd.api+json; ext=jsonpatch',
         function (key, val) {
           test.equal(val, 'application/vnd.api+json; ext="bulk,jsonpatch"; supported-ext="bulk,jsonpatch"');
         },
         test.done
+      );
+    },
+    invalidMixedHeaders: function (test) {
+      test.expect(1);
+
+      testHeaders(
+        this.tHeaders,
+        'application/vnd.api+json; ext=bulk',
+        'application/vnd.api+json; ext=jsonpatch',
+        test.done,
+        function (err) {
+          test.equal(err.status, 406, 'Unexpected error code.');
+          test.done();
+        }
       );
     },
     duplicatedHeaders: function (test) {
