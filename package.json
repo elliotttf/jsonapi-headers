@@ -1,0 +1,45 @@
+{
+  "name": "jsonapi-headers",
+  "version": "1.0.0",
+  "description": "Provide a middleware to validate JSON API headers on a request",
+  "main": "lib/headers.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elliotttf/jsonapi-headers.git"
+  },
+  "keywords": [
+    "JSON",
+    "API",
+    "validation",
+    "headers"
+  ],
+  "author": "Elliott Foster <elliottf@codebrews.com> (http://codebrews.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/elliotttf/jsonapi-headers/issues"
+  },
+  "homepage": "https://github.com/elliotttf/jsonapi-headers#readme",
+  "devDependencies": {
+    "ghooks": "^0.3.2",
+    "gulp": "^3.8.8",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-eslint": "^1.0.0",
+    "gulp-istanbul": "^0.8.1",
+    "gulp-nodeunit": "0.0.5",
+    "nodeunit": "^0.9.0"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "gulp lint",
+      "pre-push": "gulp test"
+    }
+  },
+  "dependencies": {
+    "content-type": "^1.0.1",
+    "http-errors": "^1.3.1",
+    "lodash": "^3.10.1"
+  }
+}
