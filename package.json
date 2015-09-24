@@ -1,6 +1,6 @@
 {
   "name": "jsonapi-headers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Provide a middleware to validate JSON API headers on a request",
   "main": "lib/headers.js",
   "scripts": {

@@ -24,3 +24,6 @@ If there are no validation problems, the `Content-Type` of the response will
 be appropriately assigned, e.g.
 `application/vnd.api+json; ext=bulk; supported-ext="batch,jsonpatch"`
 
+Additionally, any extensions that the request is supporting will be added as
+an array to `req.ext`.
+
