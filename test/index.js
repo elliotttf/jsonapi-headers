@@ -25,13 +25,13 @@ module.exports = {
 
     test.done();
   },
-  emptyExtensions: function (test) {
+  emptyHeaders: function (test) {
     test.expect(1);
     var tHeaders = headers();
 
     testHeaders(
       tHeaders,
-      'application/vnd.api+json',
+      undefined,
       undefined,
       function (key, val) {
         test.equal(val, 'application/vnd.api+json');
@@ -39,18 +39,30 @@ module.exports = {
       test.done
     );
   },
-  invalidParameters: function (test) {
+  undefinedAccept: function (test) {
     test.expect(1);
     var tHeaders = headers();
     testHeaders(
       tHeaders,
-      'application/vnd.api+json; charset=test',
+      '*/*; charset=test',
       undefined,
-      test.done,
-      function (err) {
-        test.equal(err.status, 415, 'Unexpected error code.');
-        test.done();
-      }
+      function (key, val) {
+        test.equal(val, 'application/vnd.api+json');
+      },
+      test.done
+    );
+  },
+  mixexValidAccept: function (test) {
+    test.expect(1);
+    var tHeaders = headers();
+    testHeaders(
+      tHeaders,
+      'application/vnd.api+json,application/vnd.api+json; charset=test',
+      undefined,
+      function (key, val) {
+        test.equal(val, 'application/vnd.api+json');
+      },
+      test.done
     );
   },
   invalidAccept: function (test) {
@@ -58,11 +70,25 @@ module.exports = {
     var tHeaders = headers();
     testHeaders(
       tHeaders,
+      'application/vnd.api+json; charset=test',
+      undefined,
+      test.done,
+      function (err) {
+        test.equal(err.status, 406, 'Unexpected error code.');
+        test.done();
+      }
+    );
+  },
+  invalidParameters: function (test) {
+    test.expect(1);
+    var tHeaders = headers();
+    testHeaders(
+      tHeaders,
       undefined,
       'application/vnd.api+json; charset=test',
       test.done,
       function (err) {
-        test.equal(err.status, 406, 'Unexpected error code.');
+        test.equal(err.status, 415, 'Unexpected error code.');
         test.done();
       }
     );
