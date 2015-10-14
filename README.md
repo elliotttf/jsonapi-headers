@@ -10,7 +10,7 @@ JSON API based systems. In additon to basic [content negotiation](http://jsonapi
 
 ```javascript
 // Without extension support.
-app.use(require('jsonapi-headers'));
+app.use(require('jsonapi-headers')());
 
 // OR With extension support.
 app.use(require('jsonapi-headers')(['batch', 'jsonpatch']));
