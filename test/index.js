@@ -1,169 +1,162 @@
-var headers = require('../');
+'use strict';
 
-var testHeaders = function (tHeaders, accept, contentType, set, next) {
+const headers = require('../');
+
+const testHeaders = (tHeaders, accept, contentType, set, next) => {
   tHeaders(
     {
-      get: function (key) {
+      get(key) {
         if (key === 'accept') {
           return accept;
         }
         return contentType;
-      }
+      },
     },
-    {set: set},
-    next
-  );
+    { set },
+    next);
 };
 
 module.exports = {
-  invalidExtensions: function (test) {
+  invalidExtensions(test) {
     test.expect(1);
 
-    test.throws(function () {
+    test.throws(() => {
       headers('foo');
     }, 'Invalid supported extensions allowed.');
 
     test.done();
   },
-  emptyHeaders: function (test) {
+  emptyHeaders(test) {
     test.expect(1);
-    var tHeaders = headers();
+    const tHeaders = headers();
 
     testHeaders(
       tHeaders,
       undefined,
       undefined,
-      function (key, val) {
+      (key, val) => {
         test.equal(val, 'application/vnd.api+json');
       },
-      test.done
-    );
+      test.done);
   },
-  undefinedAccept: function (test) {
+  undefinedAccept(test) {
     test.expect(1);
-    var tHeaders = headers();
+    const tHeaders = headers();
     testHeaders(
       tHeaders,
       '*/*; charset=test',
       undefined,
-      function (key, val) {
+      (key, val) => {
         test.equal(val, 'application/vnd.api+json');
       },
-      test.done
-    );
+      test.done);
   },
-  mixexValidAccept: function (test) {
+  mixexValidAccept(test) {
     test.expect(1);
-    var tHeaders = headers();
+    const tHeaders = headers();
     testHeaders(
       tHeaders,
       'application/vnd.api+json,application/vnd.api+json; charset=test',
       undefined,
-      function (key, val) {
+      (key, val) => {
         test.equal(val, 'application/vnd.api+json');
       },
-      test.done
-    );
+      test.done);
   },
-  invalidAccept: function (test) {
+  invalidAccept(test) {
     test.expect(1);
-    var tHeaders = headers();
+    const tHeaders = headers();
     testHeaders(
       tHeaders,
       'application/vnd.api+json; charset=test',
       undefined,
       test.done,
-      function (err) {
+      (err) => {
         test.equal(err.status, 406, 'Unexpected error code.');
         test.done();
-      }
-    );
+      });
   },
-  invalidParameters: function (test) {
+  invalidParameters(test) {
     test.expect(1);
-    var tHeaders = headers();
+    const tHeaders = headers();
     testHeaders(
       tHeaders,
       undefined,
       'application/vnd.api+json; charset=test',
       test.done,
-      function (err) {
+      (err) => {
         test.equal(err.status, 415, 'Unexpected error code.');
         test.done();
-      }
-    );
+      });
   },
   withExtensions: {
-    setUp: function (cb) {
+    setUp(cb) {
       this.tHeaders = headers(['bulk', 'jsonpatch']);
       cb();
     },
-    invalidExtensions: function (test) {
+    invalidExtensions(test) {
       test.expect(1);
       testHeaders(
         this.tHeaders,
         'application/vnd.api+json; ext=test',
         undefined,
         test.done,
-        function (err) {
+        (err) => {
           test.equal(err.status, 406, 'Unexpected error code.');
           test.done();
-        }
-      );
+        });
     },
-    emptyAccept: function (test) {
+    emptyAccept(test) {
       test.expect(1);
 
       testHeaders(
         this.tHeaders,
         'application/vnd.api+json',
         undefined,
-        function (key, val) {
+        (key, val) => {
           test.equal(val, 'application/vnd.api+json; supported-ext="bulk,jsonpatch"');
         },
-        test.done
-      );
+        test.done);
     },
-    singleAccept: function (test) {
+    singleAccept(test) {
       test.expect(1);
 
       testHeaders(
         this.tHeaders,
         'application/vnd.api+json; ext=bulk',
         undefined,
-        function (key, val) {
+        (key, val) => {
           test.equal(val, 'application/vnd.api+json; ext=bulk; supported-ext="bulk,jsonpatch"');
         },
-        test.done
-      );
+        test.done);
     },
-    multipleAccept: function (test) {
+    multipleAccept(test) {
       test.expect(1);
 
       testHeaders(
         this.tHeaders,
         'application/vnd.api+json; ext="jsonpatch,bulk"',
         undefined,
-        function (key, val) {
+        (key, val) => {
+          // eslint-disable-next-line max-len
           test.equal(val, 'application/vnd.api+json; ext="jsonpatch,bulk"; supported-ext="bulk,jsonpatch"');
         },
-        test.done
-      );
+        test.done);
     },
-    mixedHeaders: function (test) {
+    mixedHeaders(test) {
       test.expect(1);
 
       testHeaders(
         this.tHeaders,
         'application/vnd.api+json; ext="bulk,jsonpatch"',
         'application/vnd.api+json; ext=jsonpatch',
-        function (key, val) {
+        (key, val) => {
+          // eslint-disable-next-line max-len
           test.equal(val, 'application/vnd.api+json; ext="bulk,jsonpatch"; supported-ext="bulk,jsonpatch"');
         },
-        test.done
-      );
+        test.done);
     },
-    invalidMixedHeaders: function (test) {
+    invalidMixedHeaders(test) {
       test.expect(1);
 
       testHeaders(
@@ -171,25 +164,23 @@ module.exports = {
         'application/vnd.api+json; ext=bulk',
         'application/vnd.api+json; ext=jsonpatch',
         test.done,
-        function (err) {
+        (err) => {
           test.equal(err.status, 406, 'Unexpected error code.');
           test.done();
-        }
-      );
+        });
     },
-    duplicatedHeaders: function (test) {
+    duplicatedHeaders(test) {
       test.expect(1);
 
       testHeaders(
         this.tHeaders,
         'application/vnd.api+json; ext=bulk',
         'application/vnd.api+json; ext=bulk',
-        function (key, val) {
+        (key, val) => {
           test.equal(val, 'application/vnd.api+json; ext=bulk; supported-ext="bulk,jsonpatch"');
         },
-        test.done
-      );
-    }
-  }
+        test.done);
+    },
+  },
 };
 
