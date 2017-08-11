@@ -33,12 +33,12 @@
   },
   "devDependencies": {
     "coveralls": "^2.11.9",
-    "eslint": "^3.11.1",
+    "eslint": "^4.4.1",
     "eslint-config-airbnb-base": "^11.0.1",
     "eslint-plugin-import": "^2.1.0",
-    "ghooks": "^1.2.1",
+    "ghooks": "^2.0.0",
     "istanbul": "^0.4.3",
-    "nodeunit": "0.11.0",
+    "nodeunit": "0.11.1",
     "semantic-release": "^6.3.2"
   },
   "config": {
